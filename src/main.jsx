@@ -1,0 +1,8 @@
+import { createRoot } from 'react-dom/client'
+import App from './App.jsx'
+import '@fontsource-variable/space-grotesk'
+import '@fontsource-variable/jetbrains-mono'
+import './styles/global.css'
+import './styles/sections.css'
+
+createRoot(document.getElementById('root')).render(<App />)
