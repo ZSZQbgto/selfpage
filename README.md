@@ -2,7 +2,11 @@
 
 一个用 **React 19 + Three.js + 原生 WebGL** 构建的单页个人作品集，集中展示 Java / Go / OpenGL / WebGL / Blender / GLSL / React 技术栈。页面视觉全部由代码生成：SVG 项目封面、CSS 光效与实时 GLSL，无外部图片依赖（`public/og-cover.jpg` 仅为社交分享预览图）。
 
+> 完整的实现细节、性能预算、可访问性与部署说明见 [主页项目的详细技术栈.md](主页项目的详细技术栈.md)。
+
 ## 启动
+
+需要 Node.js `^20.19.0 || >=22.12.0`（Vite 8 要求，推荐 22 LTS 或更新版本）。
 
 ```bash
 npm install
@@ -39,6 +43,34 @@ node tools/audit-a11y.mjs   # axe-core WCAG A/AA 扫描
 ```
 
 设置 `PREVIEW_URL=http://127.0.0.1:4173/` 可对生产预览执行同样的检查。
+
+## 部署到 GitHub Pages
+
+仓库已包含 [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)，推送到默认分支（`main` 或 `master`）即自动构建并发布。
+
+1. 将代码推送到 GitHub（默认分支 `main` 或 `master`）。
+2. 打开仓库 **Settings → Pages → Build and deployment**，把 **Source** 设为 **GitHub Actions**。
+3. 等待 Actions 完成，访问 `https://<用户名>.github.io/<仓库名>/`。
+
+Base path 由工作流自动解析，无需手改 `vite.config.js`：
+
+| 场景 | `VITE_BASE` |
+| --- | --- |
+| 项目页 `https://<用户名>.github.io/<仓库名>/` | `/<仓库名>/` |
+| 用户/组织页 `https://<用户名>.github.io/` | `/` |
+| 自定义域名（`public/CNAME`） | `/` |
+| 仓库变量 `PAGES_BASE` | 覆盖值，如 `/docs/` |
+
+自定义域名：在 `public/CNAME` 写入域名，或在仓库 Variables 中设置 `PAGES_BASE=/`。  
+workflow 同时监听 `main` 与 `master`；使用其他分支名或子路径部署时，同步修改 workflow 的 `branches` / `PAGES_BASE`。
+
+本地模拟 Pages 子路径构建：
+
+```bash
+VITE_BASE=/selfpage/ npm run build && npm run preview
+# Windows PowerShell:
+$env:VITE_BASE='/selfpage/'; npm run build; npm run preview
+```
 
 ## 自定义
 
